@@ -1,0 +1,49 @@
+/* ─── SKILLS (logo grid + category cards) ─── */
+    #skills { background: var(--white); }
+    .skills-section-grid {
+      display: grid; grid-template-columns: 1fr;
+      gap: 3rem; align-items: start;
+    }
+    /* ── Marquee logo strip ── */
+    .logo-marquee-wrap {
+      display: flex; flex-direction: column; gap: 0.75rem;
+      overflow: hidden;
+    }
+    .marquee-track {
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+    }
+    .marquee-inner {
+      display: flex; gap: 0.75rem;
+      width: max-content;
+      will-change: transform;
+    }
+    .marquee-left  { animation: scrollLeft  30s linear infinite; }
+    .marquee-right { animation: scrollRight 30s linear infinite; }
+    .marquee-inner:hover { animation-play-state: paused; }
+    @keyframes scrollLeft  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes scrollRight { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+    .logo-pill {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.55rem 1rem;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 999px; white-space: nowrap;
+      transition: box-shadow .2s, border-color .2s;
+      flex-shrink: 0;
+    }
+    .logo-pill:hover { border-color: var(--black); box-shadow: 0 4px 14px rgba(0,0,0,0.07); }
+    .logo-pill img { width: auto; height: 20px; object-fit: contain; display: block; }
+    .logo-pill span { font-size: 0.76rem; font-weight: 600; color: var(--mid); letter-spacing: 0.02em; }
+    @media (prefers-reduced-motion: reduce) { .marquee-left, .marquee-right { animation: none; } }
+
+    .skills-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .skill-col { background: var(--white); padding: 1.5rem 1.75rem; transition: background .2s; }
+    .skill-col:hover { background: var(--off); }
+    .skill-col-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+    .skill-bar-accent { width: 3px; height: 22px; background: var(--black); border-radius: 2px; flex-shrink: 0; }
+    .skill-col h3 { font-family: var(--serif); font-size: 1rem; font-weight: 700; color: var(--black); }
+    .skill-col-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--light); margin-bottom: 1rem; }
+    .skill-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+    .skill-list li { font-size: 0.84rem; color: var(--mid); font-weight: 400; padding-left: 0.9rem; position: relative; }
+    .skill-list li::before { content: '–'; position: absolute; left: 0; color: var(--border); }
