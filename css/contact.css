@@ -1,2 +1,24 @@
-/* Contact & footer */
-/* ─── CONTACT ─── *//* ─── FOOTER ─── */
+/* ── CONTACT & FOOTER ── */
+#contact { background: var(--black); color: var(--white); }
+[data-theme="dark"] #contact { background: #080808; }
+.contact-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 6rem; align-items: start; }
+#contact .eyebrow { color: rgba(255,255,255,0.3); }
+#contact h2.heading { color: #fff; }
+#contact h2.heading em { color: rgba(255,255,255,0.4); }
+.contact-intro { font-size: 1rem; font-weight: 300; color: rgba(255,255,255,0.5); line-height: 1.8; margin-bottom: 2.5rem; }
+.contact-details { display: flex; flex-direction: column; gap: 1.2rem; }
+.contact-row { display: flex; gap: 1.2rem; align-items: baseline; }
+.contact-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.25); flex-shrink: 0; width: 80px; }
+.contact-val { font-size: 0.92rem; color: var(--mid); }
+.contact-val a { color: rgba(255,255,255,0.75); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.15); transition: color 0.2s, border-color 0.2s; }
+.contact-val a:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+.contact-right-big { font-family: var(--serif); font-size: clamp(36px, 4.5vw, 58px); font-weight: 900; line-height: 1.1; letter-spacing: -0.02em; color: #fff; margin-bottom: 1.5rem; }
+.contact-right-big em { font-style: italic; color: rgba(255,255,255,0.35); }
+.contact-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-white { background: #fff; color: #0d0d0d; border: 1.5px solid #fff; }
+.btn-white:hover { opacity: .85; }
+.btn-white-ghost { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,0.25); }
+.btn-white-ghost:hover { border-color: #fff; }
+@media (max-width: 900px) {
+  .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+}
