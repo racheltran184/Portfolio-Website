@@ -92,10 +92,20 @@ h2.heading em { font-style: italic; font-weight: 700; }
 .cert-chip { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em; padding: 0.25rem 0.65rem; border: 1px solid var(--border); border-radius: 2px; color: var(--mid); background: var(--off); }
 
 /* ─── RESPONSIVE ─── */
+/* ─── RESPONSIVE ─── */
 @media (max-width: 900px) {
   .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+  
+  /* Disable sticky scrolling when stacked */
+  .about-sticky { position: relative; top: 0; }
+  
+  /* Restrict image size and center it on mobile */
+  .profile-box { max-width: 280px; margin: 0 auto; }
+  .social-row { justify-content: center; }
+  
   .exp-container { grid-template-columns: 1fr; gap: 3rem; }
 }
+
 @media (max-width: 600px) {
   .exp-tab-bar { gap: 0.5rem; }
   .exp-tab-btn { padding: 0.5rem 1rem; font-size: 0.75rem; }
