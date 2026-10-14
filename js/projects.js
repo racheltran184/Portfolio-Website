@@ -9,7 +9,7 @@ document.querySelectorAll('.filter-btn').forEach(function(btn) {
     var f = btn.dataset.filter;
     document.querySelectorAll('.project-card').forEach(function(c) {
       var tags = c.dataset.tags || '';
-      c.style.display = (f === 'all' || tags.includes(f)) ? 'flex' : 'none';
+      c.style.display = (f === 'all' || tags.includes(f)) ? '' : 'none';
     });
   });
 });
