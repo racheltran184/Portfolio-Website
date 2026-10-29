@@ -5,13 +5,476 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Rachel Tran — Data Analyst</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/nav.css">
-  <link rel="stylesheet" href="css/hero.css">
-  <link rel="stylesheet" href="css/about.css">
-  <link rel="stylesheet" href="css/skills.css">
-  <link rel="stylesheet" href="css/projects.css">
-  <link rel="stylesheet" href="css/contact.css">
+  <style>
+    /* ── LIGHT / DARK TOKENS ── */
+    :root, [data-theme="light"] {
+      --white: #ffffff;
+      --off: #f9f9f7;
+      --black: #0d0d0d;
+      --mid: #555;
+      --light: #aaa;
+      --border: #e8e8e8;
+      --accent: #0d0d0d;
+      --tag-bg: #f3f3f1;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'Outfit', sans-serif;
+      --surface: #f3f3f1;
+      --nav-bg: rgba(255,255,255,0.92);
+    }
+    [data-theme="dark"] {
+      --white: #0e0e0d;
+      --off: #141413;
+      --black: #eeecea;
+      --mid: #9e9c96;
+      --light: #5a5955;
+      --border: #2a2a28;
+      --accent: #eeecea;
+      --tag-bg: #1e1e1c;
+      --surface: #1a1a18;
+      --nav-bg: rgba(14,14,13,0.92);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--white);
+      color: var(--black);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background .3s, color .3s;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      height: 62px;
+      display: flex; align-items: center;
+      padding: 0 6vw;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--black); text-decoration: none;
+      letter-spacing: 0.01em;
+    }
+    .nav-links { display: flex; gap: 2.25rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.07em; text-transform: uppercase;
+      color: var(--mid); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--black); }
+    .nav-right { display: flex; align-items: center; gap: 0.75rem; }
+    .theme-toggle {
+      width: 38px; height: 38px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: transparent; color: var(--mid);
+      cursor: pointer; transition: border-color .2s, color .2s, background .2s;
+    }
+    .theme-toggle:hover { border-color: var(--black); color: var(--black); background: var(--off); }
+    .nav-cta {
+      font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      background: var(--black); color: var(--white);
+      padding: 0.5rem 1.2rem; border-radius: 2px;
+      text-decoration: none; transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.75; }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 80px 6vw 60px;
+      position: relative; overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner {
+      max-width: 1160px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; gap: 4rem;
+    }
+    .hero-left { position: relative; z-index: 2; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--mid); margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.6s 0.1s ease forwards;
+    }
+    .hero-eyebrow span { display: inline-block; width: 28px; height: 1px; background: var(--mid); }
+    h1.hero-name {
+      font-family: var(--serif);
+      font-size: clamp(52px, 6.5vw, 88px);
+      font-weight: 900; line-height: 1.0;
+      letter-spacing: -0.03em; color: var(--black);
+      margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.6s 0.2s ease forwards;
+    }
+    h1.hero-name .italic { font-style: italic; font-weight: 700; }
+    .hero-sub {
+      font-size: 1.05rem; font-weight: 300;
+      color: var(--mid); line-height: 1.75;
+      max-width: 420px; margin-bottom: 2.5rem;
+      opacity: 0; animation: fadeUp 0.6s 0.35s ease forwards;
+    }
+    .hero-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.6s 0.5s ease forwards;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.7rem 1.6rem;
+      font-family: var(--sans); font-size: 0.82rem; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      text-decoration: none; border-radius: 2px;
+      transition: all 0.2s;
+    }
+    .btn-dark { background: var(--black); color: var(--white); border: 1.5px solid var(--black); }
+    .btn-dark:hover { opacity: .75; }
+    .btn-ghost { background: transparent; color: var(--black); border: 1.5px solid var(--black); }
+    .btn-ghost:hover { background: var(--black); color: var(--white); }
+    .hero-right {
+      display: flex; flex-direction: column; align-items: flex-end;
+      opacity: 0; animation: fadeIn 0.8s 0.4s ease forwards;
+    }
+    .hero-big-text {
+      font-family: var(--serif);
+      font-size: clamp(80px, 10vw, 148px);
+      font-weight: 900; font-style: italic;
+      line-height: 0.9; letter-spacing: -0.04em;
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--border);
+      text-align: right; user-select: none;
+    }
+    .scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      opacity: 0; animation: fadeIn 1s 1.2s ease forwards;
+    }
+    .scroll-hint span { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--light); }
+    .scroll-line { width: 1px; height: 36px; background: var(--border); position: relative; overflow: hidden; }
+    .scroll-line::after {
+      content: ''; position: absolute; top: -100%; left: 0;
+      width: 100%; height: 100%; background: var(--black);
+      animation: scrollDrop 1.5s 1.5s ease-in-out infinite;
+    }
+    @keyframes scrollDrop { 0% { top: -100%; } 100% { top: 100%; } }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 110px 6vw; }
+    .container { max-width: 1160px; margin: 0 auto; }
+    .section-header { margin-bottom: 3.5rem; }
+    .eyebrow {
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--light); margin-bottom: 0.75rem;
+    }
+    h2.heading {
+      font-family: var(--serif);
+      font-size: clamp(32px, 3.5vw, 50px);
+      font-weight: 900; line-height: 1.1;
+      letter-spacing: -0.025em; color: var(--black);
+    }
+    h2.heading em { font-style: italic; font-weight: 700; }
+
+    /* ─── ABOUT ─── */
+    #about { background: var(--off); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1.5fr;
+      gap: 6rem; align-items: start;
+    }
+    .about-sticky { position: sticky; top: 90px; }
+    .profile-box {
+      width: 100%; aspect-ratio: 4/5;
+      background: var(--border);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+    }
+    .profile-placeholder { font-family: var(--serif); font-size: 5rem; font-style: italic; color: var(--light); user-select: none; }
+    .profile-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(13,13,13,0.75); color: rgba(255,255,255,0.6);
+      font-size: 0.7rem; letter-spacing: 0.08em; text-align: center;
+      padding: 0.5rem; text-transform: uppercase;
+    }
+    .about-body p {
+      font-size: 1rem; font-weight: 300;
+      color: var(--mid); line-height: 1.85;
+      margin-bottom: 1.1rem;
+    }
+    .about-body p strong { color: var(--black); font-weight: 500; }
+    .social-row { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+    .social-link {
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.07em; text-transform: uppercase;
+      color: var(--black); text-decoration: none;
+      padding-bottom: 2px; border-bottom: 1.5px solid var(--black);
+      transition: opacity 0.2s;
+    }
+    .social-link:hover { opacity: 0.5; }
+
+    /* ─── SKILLS (logo grid + category cards) ─── */
+    #skills { background: var(--white); }
+    .skills-section-grid {
+      display: grid; grid-template-columns: 1fr;
+      gap: 3rem; align-items: start;
+    }
+    /* ── Marquee logo strip ── */
+    .logo-marquee-wrap {
+      display: flex; flex-direction: column; gap: 0.75rem;
+      overflow: hidden;
+    }
+    .marquee-track {
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+    }
+    .marquee-inner {
+      display: flex; gap: 0.75rem;
+      width: max-content;
+      will-change: transform;
+    }
+    .marquee-left  { animation: scrollLeft  30s linear infinite; }
+    .marquee-right { animation: scrollRight 30s linear infinite; }
+    .marquee-inner:hover { animation-play-state: paused; }
+    @keyframes scrollLeft  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes scrollRight { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+    .logo-pill {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.55rem 1rem;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 999px; white-space: nowrap;
+      transition: box-shadow .2s, border-color .2s;
+      flex-shrink: 0;
+    }
+    .logo-pill:hover { border-color: var(--black); box-shadow: 0 4px 14px rgba(0,0,0,0.07); }
+    .logo-pill img { width: auto; height: 20px; object-fit: contain; display: block; }
+    .logo-pill span { font-size: 0.76rem; font-weight: 600; color: var(--mid); letter-spacing: 0.02em; }
+    @media (prefers-reduced-motion: reduce) { .marquee-left, .marquee-right { animation: none; } }
+
+    .skills-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .skill-col { background: var(--white); padding: 1.5rem 1.75rem; transition: background .2s; }
+    .skill-col:hover { background: var(--off); }
+    .skill-col-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+    .skill-bar-accent { width: 3px; height: 22px; background: var(--black); border-radius: 2px; flex-shrink: 0; }
+    .skill-col h3 { font-family: var(--serif); font-size: 1rem; font-weight: 700; color: var(--black); }
+    .skill-col-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--light); margin-bottom: 1rem; }
+    .skill-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+    .skill-list li { font-size: 0.84rem; color: var(--mid); font-weight: 400; padding-left: 0.9rem; position: relative; }
+    .skill-list li::before { content: '–'; position: absolute; left: 0; color: var(--border); }
+
+    /* ─── EXPERIENCE + EDUCATION TABS ─── */
+    #experience { background: var(--white); }
+    .exp-tab-bar { display: flex; gap: 0.75rem; margin-bottom: 3rem; flex-wrap: wrap; }
+    .exp-tab-btn {
+      font-family: var(--sans); font-size: 0.82rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 0.6rem 1.6rem; border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: transparent; color: var(--mid);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .exp-tab-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
+    .exp-tab-btn:hover:not(.active) { border-color: var(--black); color: var(--black); }
+    .exp-tab-panel { display: none; }
+    .exp-tab-panel.active { display: block; }
+    .exp-container { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .exp-section-title {
+      font-family: var(--serif); font-size: 1.05rem; font-weight: 700;
+      color: var(--black); margin-bottom: 2rem;
+      padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .exp-section-title::before { content: ''; display: block; width: 18px; height: 2px; background: var(--black); }
+    .exp-item { padding-bottom: 2.25rem; margin-bottom: 2.25rem; border-bottom: 1px solid var(--border); }
+    .exp-item:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+    .exp-date { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--light); margin-bottom: 0.35rem; }
+    .exp-item h3 { font-family: var(--serif); font-size: 1.1rem; font-weight: 700; color: var(--black); margin-bottom: 0.15rem; }
+    .exp-company { font-size: 0.85rem; color: var(--mid); margin-bottom: 0.9rem; }
+    .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .exp-bullets li { font-size: 0.85rem; font-weight: 300; color: var(--mid); line-height: 1.65; padding-left: 1rem; position: relative; }
+    .exp-bullets li::before { content: '·'; position: absolute; left: 0; color: var(--light); font-size: 1rem; }
+    .edu-item { padding-bottom: 2.25rem; margin-bottom: 2.25rem; border-bottom: 1px solid var(--border); }
+    .edu-item:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+    .edu-degree { font-family: var(--serif); font-size: 1.05rem; font-weight: 700; color: var(--black); margin-bottom: 0.2rem; }
+    .edu-uni { font-size: 0.85rem; color: var(--mid); margin-bottom: 0.5rem; }
+    .edu-detail { font-size: 0.82rem; color: var(--light); line-height: 1.6; }
+    .cert-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+    .cert-chip { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em; padding: 0.25rem 0.65rem; border: 1px solid var(--border); border-radius: 2px; color: var(--mid); background: var(--off); }
+
+
+    /* ─── PROJECT CARDS (expanded) ─── */
+#projects { background: var(--off); }
+.filter-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+.filter-btn {
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.4rem 1rem; border-radius: 999px;
+  border: 1.5px solid var(--border); background: var(--white); color: var(--mid);
+  cursor: pointer; transition: all 0.18s;
+}
+.filter-btn:hover, .filter-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
+.projects-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1.75rem;
+  align-items: stretch;
+}
+.project-card {
+  background: var(--white); border: 1px solid var(--border);
+  overflow: hidden; display: flex; flex-direction: column;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.project-card:hover { transform: translateY(-5px); box-shadow: 0 20px 56px rgba(0,0,0,0.08); }
+
+/* Card header bar */
+.project-card-top {
+  background: var(--off); padding: 1.25rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.project-num { font-family: var(--serif); font-size: 2rem; font-weight: 900; font-style: italic; color: var(--black); opacity: 0.15; line-height: 1; flex-shrink: 0; }
+.project-header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.4rem; }
+.project-category { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); }
+
+/* Card body */
+.project-card-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; gap: 1.1rem; }
+.project-card-body h3 { font-family: var(--serif); font-size: 1.1rem; font-weight: 700; color: var(--black); line-height: 1.3; margin: 0; }
+.project-summary { font-size: 0.875rem; font-weight: 300; color: var(--mid); line-height: 1.7; margin: 0; flex: 1; }
+
+/* Divider */
+.project-divider { height: 1px; background: var(--border); margin: 0; }
+
+/* Tech row */
+.project-meta-row { display: flex; flex-direction: column; gap: 0.6rem; }
+.project-meta-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--light); }
+.project-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.chip-tool {
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em;
+  padding: 0.22rem 0.65rem; border-radius: 3px;
+  background: var(--black); color: var(--white);
+}
+.chip-technique {
+  font-size: 0.7rem; font-weight: 500;
+  padding: 0.22rem 0.65rem; border-radius: 3px;
+  border: 1px solid var(--border); color: var(--mid); background: var(--off);
+}
+
+/* Result stats (Updated for sentence-based text) */
+.project-results { 
+  display: flex; 
+  flex-direction: column; /* Stacks the results vertically */
+  gap: 0; 
+  border: 1px solid var(--border); 
+  border-radius: 3px; 
+  overflow: hidden; 
+}
+.result-stat { 
+  flex: 1; 
+  padding: 0.75rem 0.9rem; 
+  background: var(--off); 
+  border-bottom: 1px solid var(--border); /* Changed to border-bottom for stacked layout */
+  text-align: left; /* Aligns long text to the left for readability */
+  font-size: 0.875rem; /* Matches the size of the project summary */
+  color: var(--mid);
+  line-height: 1.5;
+}
+.result-stat:last-child { border-bottom: none; }
+.result-stat strong { color: var(--black); }
+
+/* These two below are retained just in case you use them in other cards for raw numbers */
+.result-num { font-family: var(--serif); font-size: 1.35rem; font-weight: 900; color: var(--black); line-height: 1; display: block; }
+.result-desc { font-size: 0.67rem; color: var(--light); margin-top: 0.25rem; line-height: 1.3; display: block; letter-spacing: 0.02em; }
+
+
+    /* ── Project card image ── */
+    .project-card-img {
+      width: 100%; height: 180px; overflow: hidden;
+      background: var(--black);
+      position: relative;
+    }
+    .project-card-img img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.4s ease;
+    }
+    .project-card:hover .project-card-img img { transform: scale(1.03); }
+    .project-card-img .img-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--black);
+      font-family: var(--serif); font-size: 1rem; font-style: italic; font-weight: 700;
+      color: rgba(255,255,255,0.55); letter-spacing: 0.06em;
+      user-select: none;
+    }
+    /* Footer */
+.project-card-footer {
+  padding: 0.9rem 1.5rem; border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.project-link { font-size: 0.77rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--black); text-decoration: none; border-bottom: 1.5px solid var(--black); padding-bottom: 1px; transition: opacity 0.2s; }
+.project-link:hover { opacity: 0.4; }
+.project-gh-icon { color: var(--light); transition: color .2s; }
+.project-gh-icon:hover { color: var(--black); }
+.badge { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25rem 0.6rem; background: var(--border); color: var(--mid); border-radius: 2px; }
+.project-tool-badges { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: flex-end; }
+    /* ─── CONTACT ─── */
+    #contact { background: var(--black); color: var(--white); }
+    [data-theme="dark"] #contact { background: #080808; }
+    .contact-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 6rem; align-items: start; }
+    #contact .eyebrow { color: rgba(255,255,255,0.3); }
+    #contact h2.heading { color: #fff; }
+    #contact h2.heading em { color: rgba(255,255,255,0.4); }
+    .contact-intro { font-size: 1rem; font-weight: 300; color: rgba(255,255,255,0.5); line-height: 1.8; margin-bottom: 2.5rem; }
+    .contact-details { display: flex; flex-direction: column; gap: 1.2rem; }
+    .contact-row { display: flex; gap: 1.2rem; align-items: baseline; }
+    .contact-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.25); flex-shrink: 0; width: 80px; }
+    .contact-val { font-size: 0.92rem; color: var(--mid); }
+    .contact-val a { color: rgba(255,255,255,0.75); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.15); transition: color 0.2s, border-color 0.2s; }
+    .contact-val a:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+    .contact-right-big { font-family: var(--serif); font-size: clamp(36px, 4.5vw, 58px); font-weight: 900; line-height: 1.1; letter-spacing: -0.02em; color: #fff; margin-bottom: 1.5rem; }
+    .contact-right-big em { font-style: italic; color: rgba(255,255,255,0.35); }
+    .contact-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-white { background: #fff; color: #0d0d0d; border: 1.5px solid #fff; }
+    .btn-white:hover { opacity: .85; }
+    .btn-white-ghost { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,0.25); }
+    .btn-white-ghost:hover { border-color: #fff; }
+
+    /* ─── FOOTER ─── */
+    footer { background: #080808; padding: 1.25rem 6vw; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+    footer span { font-size: 0.75rem; color: rgba(255,255,255,0.2); letter-spacing: 0.04em; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-sticky { position: static; }
+      .skills-section-grid { grid-template-columns: 1fr; }
+      .exp-container { grid-template-columns: 1fr; gap: 3.5rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 540px) {
+      .skills-logos { grid-template-columns: repeat(3, 1fr); }
+      .exp-tab-bar { flex-direction: column; }
+      .exp-tab-btn { width: 100%; text-align: center; }
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
 
@@ -20,9 +483,9 @@
   <a href="#hero" class="nav-logo">Rachel Tran</a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
-    <li><a href="#experience">Experience</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
   <div class="nav-right">
@@ -30,7 +493,7 @@
       <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       <svg id="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
     </button>
-    <a href="mailto:rachel.hantran@gmail.com" class="nav-cta">Hire Me</a>
+    <a href="mailto:racheltran184@gmail.com" class="nav-cta">Hire Me</a>
   </div>
 </nav>
 
@@ -67,15 +530,15 @@
           <div class="profile-label">Rachel Tran · Sydney</div>
         </div>
         <div class="social-row">
-          <a href="https://github.com/racheltran184" target="_blank" rel="noopener" class="social-link" style="display:inline-flex;align-items:center;gap:0.5rem;">
+          <a href="https://github.com/racheltran184" target="_blank" class="social-link" style="display:inline-flex;align-items:center;gap:0.5rem;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
             GitHub ↗
           </a>
-          <a href="mailto:rachel.hantran@gmail.com" class="social-link" style="display:inline-flex;align-items:center;gap:0.5rem;">
+          <a href="mailto:racheltran184@gmail.com" class="social-link" style="display:inline-flex;align-items:center;gap:0.5rem;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             Email ↗
           </a>
-          <a href="https://www.linkedin.com/in/racheltran184" target="_blank" rel="noopener" class="social-link" style="display:inline-flex;align-items:center;gap:0.5rem;">
+          <a href="https://www.linkedin.com/in/racheltran184" target="_blank" class="social-link" style="display:inline-flex;align-items:center;gap:0.5rem;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
             LinkedIn ↗
           </a>
@@ -88,7 +551,7 @@
         </div>
         <div class="about-body">
           <p>With <strong>3+ years of experience</strong> across finance, education and analytics, I help commercial and operational teams <strong>see what their data is really telling them</strong> and act on it with confidence.</p>
-          <p>I analyse sales and customer behaviour to surface performance gaps, trends, and opportunities that aren't visible in a spreadsheet. I then translate those findings into <strong>dashboards and reports</strong> that make the right call obvious to everyone from analysts to executives.</p>
+          <p>I analyse sales and customer behaviour to surface performance gaps, trends, and opportunities that aren't visible in a spreadsheet. I then translate those findings into <strong>dashboards and reports</strong> that make the right call obvious from analysts to executives.</p>
           <p>What sets me apart is how I work with stakeholders: I ask the business question first, then <strong>design the analytical solution around it</strong> so the output actually drives decisions, rather than sitting in a folder.</p>
         </div>
       </div>
@@ -114,13 +577,13 @@
           <div class="exp-section-title">Work Experience</div>
           <div class="exp-item">
             <div class="exp-date">Apr 2022 – Dec 2024</div>
-            <h3>Business Operations &amp; Insights Lead</h3>
+            <h3>Business Operations & Insights Lead</h3>
             <div class="exp-company">Eduright Study Advisory — Ho Chi Minh City, Vietnam</div>
             <ul class="exp-bullets">
               <li>Optimized Meta Ads campaign performance (Facebook Ads Manager) by analyzing cost-per-engagement and conversion funnels, resulting in <strong>2,600+ new followers</strong> and a <strong>30% increase in student enrollments</strong>.</li>
               <li>Engineered <strong>Excel dashboards</strong> to profile <strong>200+ prospective students</strong> and monitor admissions across <strong>40+ partner universities</strong>, providing leadership with real-time visibility into lead conversion and onboarding milestones.</li>
-              <li>Executed program performance analysis using Excel to identify cost inefficiencies, successfully <strong>reducing operational expenses by 10%</strong>.</li>
-              <li>Delivered one-on-one consultations to <strong>200+ students and parents</strong>, managing the high-stakes documentation lifecycle from initial application to successful visa issuance across multiple international jurisdictions.</li>
+              <li>Executed program performance analysis using Excel to identify cost inefficiencies, successfully <strong>reducing operational expenses by 10%</strong> .</li>
+              <li>Delivered one-on-one consultations to <strong>200+ students and parents</strong>, managing the high-stakes documentation lifecycle from initial application to successful <strong>visa issuance</strong> across multiple international jurisdictions.</li>
             </ul>
           </div>
           <div class="exp-item">
@@ -146,18 +609,18 @@
             <div class="exp-date">2024 – 2025</div>
             <div class="edu-degree">Master of Business Analytics</div>
             <div class="edu-uni">Macquarie University, Sydney — <strong>High Distinction</strong></div>
-            <div class="edu-detail">· Highest Achiever in Big Data &amp; Cyber Security, Governance Frameworks and Ethics</div>
-            <div class="edu-detail">· ASBA Predictive Analytics Competition (S1, 2025) Winner</div>
-            <div class="edu-detail">· Macquarie DataViz Finalist</div>
-            <div class="edu-detail">· Macquarie Academic Excellence Award</div>
-            <div class="edu-detail">· Macquarie Peer Mentor</div>
-            <div class="edu-detail">· Macquarie Global Leadership</div>
+            <div class="edu-detail"> · Highest Achiever in Big Data &amp; Cyber Security, Governance Frameworks and Ethics  </div>  
+            <div class="edu-detail">· ASBA Predictive Analytics Competition (S1, 2025) Winner  </div>  
+            <div class="edu-detail">· Macquarie DataViz Finalist </div>  
+            <div class="edu-detail">· Macquarie Academic Excellence Award</div>  
+            <div class="edu-detail">· Macquarie Peer Mentor </div> 
+            <div class="edu-detail">· Macquarie Global Leadership </div>
           </div>
           <div class="edu-item">
             <div class="exp-date">2019 – 2022</div>
             <div class="edu-degree">Bachelor of International Finance</div>
             <div class="edu-uni">University of Economics Ho Chi Minh City — <strong>Distinction</strong></div>
-            <div class="edu-detail">· UEH Undergraduate Academic Excellence Scholarship (Semester 1, 2019)</div>
+            <div class="edu-detail">UEH Undergraduate Academic Excellence Scholarship in Semester 1, 2019. </div>  
           </div>
         </div>
         <div>
@@ -280,26 +743,170 @@
     </div>
     <div class="filter-bar reveal" id="filterBar">
       <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="ecommerce">E-commerce</button>
       <button class="filter-btn" data-filter="python">Python</button>
       <button class="filter-btn" data-filter="powerbi">Power BI</button>
       <button class="filter-btn" data-filter="sql">SQL</button>
       <button class="filter-btn" data-filter="tableau">Tableau</button>
-      <button class="filter-btn" data-filter="webapp">Web App</button>
     </div>
     <div class="projects-grid reveal" id="projectsGrid">
-
-<!-- ─── 01 · Airbnb ─── -->
-  <div class="project-card" data-tags="python">
+<div class="project-card" data-tags="python ecommerce">
   <div class="project-card-top">
     <div class="project-num">01</div>
     <div class="project-header-right">
+      <span class="project-category">E-commerce Strategy &amp; Live Commerce</span>
+      <div class="project-tool-badges"><span class="badge">Python</span><span class="badge">JavaScript</span><span class="badge">Excel</span></div>
+    </div>
+  </div>
+  <div class="project-card-img">
+    <img src="images/tiktok-shop-project.jpg" alt="TikTok Shop case challenge: the Mission Control live-day dashboard and a two-phone buyer journey prototype" loading="lazy"
+         onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>TikTok Shop SEA Case Challenge</div>'"/>
+  </div>
+  <div class="project-card-body">
+    <h3>TikTok Shop SEA Case Challenge: Vietnam, Malaysia &amp; Thailand</h3>
+    <p class="project-summary">
+      Three market cases for TikTok APAC Early Careers' 2026 Southeast Asia challenge. I broke each GMV target into its drivers, found the one that had to move, and built the tools that make each plan runnable: a live-day mission-control monitor and two clickable buyer and brand journeys. Every deck number is rebuilt and checked in a Python notebook.
+    </p>
+
+    <div class="project-divider"></div>
+
+    <div class="project-meta-row">
+      <span class="project-meta-label">🛠 Tools</span>
+      <div class="project-chips">
+        <span class="chip-tool">Python</span>
+        <span class="chip-tool">pandas</span>
+        <span class="chip-tool">matplotlib</span>
+        <span class="chip-tool">JavaScript</span>
+        <span class="chip-tool">SheetJS</span>
+        <span class="chip-tool">Excel</span>
+        <span class="chip-tool">HTML/CSS</span>
+      </div>
+    </div>
+
+    <div class="project-meta-row">
+      <span class="project-meta-label">⚙️ Techniques</span>
+      <div class="project-chips">
+        <span class="chip-technique">GMV Driver Trees</span>
+        <span class="chip-technique">Funnel Analysis</span>
+        <span class="chip-technique">Unit Economics</span>
+        <span class="chip-technique">Experiment Design</span>
+        <span class="chip-technique">KPI Scorecards</span>
+        <span class="chip-technique">Sensitivity Analysis</span>
+      </div>
+    </div>
+
+    <div class="project-divider"></div>
+
+    <div class="project-meta-row">
+      <span class="project-meta-label">📊 Results</span>
+      <div class="project-results">
+        <div class="result-stat">
+          <strong>Execution Control (Vietnam):</strong> Turned a US$1M single-day target into a fixed US$66.7K hourly pass mark with a two-miss trigger, so the live team gets the next move and its owner within the hour.
+        </div>
+        <div class="result-stat">
+          <strong>Unit Economics (Malaysia):</strong> Showed campaign-led buyers cost 5&times; more per repeat customer (RM163 vs RM31) while taking 55% of acquisition spend, and sized a RM174M-a-year opportunity in shoppers aged 41+.
+        </div>
+        <div class="result-stat">
+          <strong>Supply Allocation (Thailand):</strong> Ranked creator tiers by GMV per traffic point (1.25 / 1.00 / 0.60) to move a fixed promo budget toward 300 high-yield mid-tier creators.
+        </div>
+        <div class="result-stat">
+          <strong>Reproducibility:</strong> Rebuilt all three deck appendices in Python: 50 of 50 figures reproduce, and stress tests expose each plan's riskiest assumption.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="project-card-footer">
+    <a href="https://racheltran184.github.io/tiktok-shop-sea-case-challenge/" target="_blank" class="project-link">View case study →</a>
+    <a href="https://github.com/racheltran184/tiktok-shop-sea-case-challenge" target="_blank" class="project-gh-icon" aria-label="GitHub">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+      </svg>
+    </a>
+  </div>
+</div>
+      <div class="project-card" data-tags="sql ecommerce">
+        <div class="project-card-top">
+          <div class="project-num">02</div>
+          <div class="project-header-right">
+            <span class="project-category">Data Engineering</span>
+            <div class="project-tool-badges"><span class="badge">SQL</span><span class="badge">T-SQL</span><span class="badge">SQL Server</span></div>
+          </div>
+        </div>
+        <div class="project-card-img">
+          <img src="images/olist-project.jpg" alt="Olist E-Commerce" loading="lazy"
+               onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Olist E-Commerce</div>'"/>
+        </div>
+<div class="project-card-body">
+    <h3>Olist E-Commerce Analytics</h3>
+    <p class="project-summary">
+      Architected an end-to-end ELT pipeline and data warehouse to analyze over 100,000 e-commerce transactions. Transformed raw operational data into strategic intelligence, uncovering critical vulnerabilities in customer retention, supplier concentration, and regional logistics to guide profitability and market expansion strategies.
+    </p>
+    
+    <div class="project-divider"></div>
+    
+    <div class="project-meta-row">
+      <span class="project-meta-label">🛠 Tools</span>
+      <div class="project-chips">
+        <span class="chip-tool">SQL</span>
+        <span class="chip-tool">T-SQL</span>
+        <span class="chip-tool">SQL Server</span>
+        <span class="chip-tool">Python</span>
+      </div>
+    </div>
+    
+    <div class="project-meta-row">
+      <span class="project-meta-label">⚙️ Techniques</span>
+      <div class="project-chips">
+        <span class="chip-technique">Dimensional Modeling</span>
+        <span class="chip-technique">Unit Economics Analysis</span>
+        <span class="chip-technique">Cohort & Churn Analysis</span>
+        <span class="chip-technique">Supplier Risk Segmentation</span>
+      </div>
+    </div>
+    
+    <div class="project-divider"></div>
+    
+    <div class="project-meta-row">
+      <span class="project-meta-label">📊 Results</span>
+      <div class="project-results">
+        <div class="result-stat">
+          <strong>Customer Lifetime Value:</strong> Identified a critical 96.8% one-time buyer rate, pivoting the strategic recommendation from costly acquisition to vital B2B retention programs.
+        </div>
+        <div class="result-stat">
+          <strong>Supplier Risk Management:</strong> Revealed that the top 10% of sellers control 68% of Gross Merchandise Value (GMV), prompting immediate vendor lock-in strategies to protect core revenue.
+        </div>
+        <div class="result-stat">
+          <strong>Margin Protection:</strong> Uncovered severe logistics inefficiencies—such as electronics freight costs consuming 68.8% of product pricing—preventing further capital burn in unprofitable regions.
+        </div>
+        <div class="result-stat">
+          <strong>Brand Equity Defense:</strong> Flagged revenue generated by high-volume, low-rating sellers, providing a data-backed case to offboard bad actors to stabilize the platform's long-term trust score.
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="project-card-footer">
+    <a href="https://github.com/racheltran184/SQL-Project-2" target="_blank" class="project-link">View on GitHub →</a>
+    <a href="https://github.com/racheltran184/SQL-Project-2" target="_blank" class="project-gh-icon" aria-label="GitHub">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+      </svg>
+    </a>
+  </div>
+</div>
+  <div class="project-card" data-tags="python">
+  <div class="project-card-top">
+    <div class="project-num">03</div>
+    <div class="project-header-right">
       <span class="project-category">Machine Learning</span>
-      <div class="project-tool-badges"><span class="badge">Python</span><span class="badge">XGBoost</span><span class="badge">LightGBM</span></div>
+      <div class="project-tool-badges">
+        </div>
     </div>
   </div>
   
           <div class="project-card-img">
-          <img src="images/airbnbproject.jpg" alt="Airbnb Price Prediction" loading="lazy"
+          <img src="images/airbnbproject.png" alt="Airbnb Price Prediction" loading="lazy"
                onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Airbnb Price Prediction</div>'"/>
         </div>
 <div class="project-card-body">
@@ -312,7 +919,7 @@
     
 
     <div class="project-meta-row">
-      <span class="project-meta-label">🛠️ Tools</span>
+      <span class="project-meta-label">🛠 Tools</span>
       <div class="project-chips">
         <span class="chip-tool">Python</span>
         <span class="chip-tool">XGBoost</span>
@@ -347,7 +954,7 @@
           <strong>Location Valuation:</strong> Quantified the exact financial impact of geography, proving that proximity to the city center drives up to a 40-60% price premium over outer suburbs.
         </div>
         <div class="result-stat">
-          <strong>Trust &amp; Experience Premiums:</strong> Revealed that strong host response rates and trust signals generate a 10-15% revenue premium, proving that experience factors often outweigh physical property features.
+          <strong>Trust & Experience Premiums:</strong> Revealed that strong host response rates and trust signals generate a 10-15% revenue premium, proving that experience factors often outweigh physical property features.
         </div>
         <div class="result-stat">
           <strong>Amenity ROI:</strong> Assigned concrete dollar values to property upgrades, demonstrating that high-value amenities consistently add $15 to $30 to the daily rental price.
@@ -360,8 +967,8 @@
   </div>
   
   <div class="project-card-footer">
-    <a href="https://github.com/racheltran184/Python-Project-1" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
-    <a href="https://github.com/racheltran184/Python-Project-1" target="_blank" rel="noopener" class="project-gh-icon" aria-label="GitHub">
+    <a href="https://github.com/racheltran184/Python-Project-1" target="_blank" class="project-link">View on GitHub →</a>
+    <a href="https://github.com/racheltran184/Python-Project-1" target="_blank" class="project-gh-icon" aria-label="GitHub">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
       </svg>
@@ -369,16 +976,16 @@
   </div>
 </div>
 
-<!-- ─── 02 · Global Energy ─── -->
       <div class="project-card" data-tags="powerbi">
         <div class="project-card-top">
-          <div class="project-num">02</div>
+          <div class="project-num">04</div>
           <div class="project-header-right">
             <span class="project-category">BI Dashboard</span>
             <div class="project-tool-badges"><span class="badge">Power BI</span><span class="badge">DAX</span><span class="badge">Power Query</span></div>
           </div>
         </div>
         <div class="project-card-img">
+          <energy-project class="jpg"></energy-project>
           <img src="images/energy-project.jpg" alt="Global Energy Dashboard" loading="lazy"
                onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Global Energy Dashboard</div>'"/>
         </div>
@@ -391,7 +998,7 @@
     <div class="project-divider"></div>
     
     <div class="project-meta-row">
-      <span class="project-meta-label">🛠️ Tools</span>
+      <span class="project-meta-label">🛠 Tools</span>
       <div class="project-chips">
         <span class="chip-tool">Power BI</span>
         <span class="chip-tool">DAX</span>
@@ -402,7 +1009,7 @@
     <div class="project-meta-row">
       <span class="project-meta-label">⚙️ Techniques</span>
       <div class="project-chips">
-        <span class="chip-technique">ETL &amp; Data Modeling</span>
+        <span class="chip-technique">ETL & Data Modeling</span>
         <span class="chip-technique">Geospatial Analytics</span>
         <span class="chip-technique">KPI Benchmarking</span>
         <span class="chip-technique">Macro-Economic Analysis</span>
@@ -428,37 +1035,35 @@
   </div>
   
   <div class="project-card-footer">
-    <a href="https://github.com/racheltran184/PowerBI-Project-2" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
-    <a href="https://github.com/racheltran184/PowerBI-Project-2" target="_blank" rel="noopener" class="project-gh-icon" aria-label="GitHub">
+    <a href="https://github.com/racheltran184/PowerBI-Project-2" target="_blank" class="project-link">View on GitHub →</a>
+    <a href="https://github.com/racheltran184/PowerBI-Project-2" target="_blank" class="project-gh-icon" aria-label="GitHub">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
       </svg>
     </a>
   </div>
 </div>
-
-<!-- ─── 03 · University Retention ─── -->
       <div class="project-card" data-tags="powerbi">
         <div class="project-card-top">
-          <div class="project-num">03</div>
+          <div class="project-num">05</div>
           <div class="project-header-right">
             <span class="project-category">ML + BI</span>
             <div class="project-tool-badges"><span class="badge">Power BI</span><span class="badge">XGBoost</span><span class="badge">Python</span></div>
           </div>
         </div>
                 <div class="project-card-img">
-          <img src="images/university-project.jpg" alt="University Analytics" loading="lazy"
+          <img src="images/university-project.png" alt="University Analytics" loading="lazy"
                onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>University Analytics</div>'"/>
         </div>
 <div class="project-card-body">
-    <h3>University Retention &amp; Portfolio Analytics</h3>
+    <h3>University Retention & Portfolio Analytics</h3>
     <p class="project-summary">
-      Engineered an end-to-end analytics platform analyzing over 52,000 enrolments to drive a strategic 'Retain &amp; Rebalance' initiative. By combining historical retention dashboards with predictive risk modeling, the solution enables university leadership to protect core revenue streams and proactively intervene with at-risk cohorts.
+      Engineered an end-to-end analytics platform analyzing over 52,000 enrolments to drive a strategic 'Retain & Rebalance' initiative. By combining historical retention dashboards with predictive risk modeling, the solution enables university leadership to protect core revenue streams and proactively intervene with at-risk cohorts.
     </p>
     <div class="project-divider"></div>
     
     <div class="project-meta-row">
-      <span class="project-meta-label">🛠️ Tools</span>
+      <span class="project-meta-label">🛠 Tools</span>
       <div class="project-chips">
         <span class="chip-tool">Power BI</span>
         <span class="chip-tool">Python</span>
@@ -498,94 +1103,20 @@
     </div>
   </div>
   <div class="project-card-footer">
-    <a href="https://github.com/racheltran184/PowerBI-Project-1" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
-    <a href="https://github.com/racheltran184/PowerBI-Project-1" target="_blank" rel="noopener" class="project-gh-icon" aria-label="GitHub">
+    <a href="https://github.com/racheltran184/PowerBI-Project-1" target="_blank" class="project-link">View on GitHub →</a>
+    <a href="https://github.com/racheltran184/PowerBI-Project-1" target="_blank" class="project-gh-icon" aria-label="GitHub">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
       </svg>
     </a>
   </div>
 </div>
-
-<!-- ─── 04 · Olist ─── -->
-      <div class="project-card" data-tags="sql">
-        <div class="project-card-top">
-          <div class="project-num">04</div>
-          <div class="project-header-right">
-            <span class="project-category">Data Engineering</span>
-            <div class="project-tool-badges"><span class="badge">SQL</span><span class="badge">T-SQL</span><span class="badge">SQL Server</span></div>
-          </div>
-        </div>
-        <div class="project-card-img">
-          <img src="images/olist-project.jpg" alt="Olist E-Commerce" loading="lazy"
-               onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Olist E-Commerce</div>'"/>
-        </div>
-<div class="project-card-body">
-    <h3>Olist E-Commerce Analytics</h3>
-    <p class="project-summary">
-      Architected an end-to-end ELT pipeline and data warehouse to analyze over 100,000 e-commerce transactions. Transformed raw operational data into strategic intelligence, uncovering critical vulnerabilities in customer retention, supplier concentration, and regional logistics to guide profitability and market expansion strategies.
-    </p>
-    
-    <div class="project-divider"></div>
-    
-    <div class="project-meta-row">
-      <span class="project-meta-label">🛠️ Tools</span>
-      <div class="project-chips">
-        <span class="chip-tool">SQL</span>
-        <span class="chip-tool">T-SQL</span>
-        <span class="chip-tool">SQL Server</span>
-        <span class="chip-tool">Python</span>
-      </div>
-    </div>
-    
-    <div class="project-meta-row">
-      <span class="project-meta-label">⚙️ Techniques</span>
-      <div class="project-chips">
-        <span class="chip-technique">Dimensional Modeling</span>
-        <span class="chip-technique">Unit Economics Analysis</span>
-        <span class="chip-technique">Cohort &amp; Churn Analysis</span>
-        <span class="chip-technique">Supplier Risk Segmentation</span>
-      </div>
-    </div>
-    
-    <div class="project-divider"></div>
-    
-    <div class="project-meta-row">
-      <span class="project-meta-label">📊 Results</span>
-      <div class="project-results">
-        <div class="result-stat">
-          <strong>Customer Lifetime Value:</strong> Identified a critical 96.8% one-time buyer rate, pivoting the strategic recommendation from costly acquisition to vital B2B retention programs.
-        </div>
-        <div class="result-stat">
-          <strong>Supplier Risk Management:</strong> Revealed that the top 10% of sellers control 68% of Gross Merchandise Value (GMV), prompting immediate vendor lock-in strategies to protect core revenue.
-        </div>
-        <div class="result-stat">
-          <strong>Margin Protection:</strong> Uncovered severe logistics inefficiencies—such as electronics freight costs consuming 68.8% of product pricing—preventing further capital burn in unprofitable regions.
-        </div>
-        <div class="result-stat">
-          <strong>Brand Equity Defense:</strong> Flagged revenue generated by high-volume, low-rating sellers, providing a data-backed case to offboard bad actors to stabilize the platform's long-term trust score.
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <div class="project-card-footer">
-    <a href="https://github.com/racheltran184/SQL-Project-2" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
-    <a href="https://github.com/racheltran184/SQL-Project-2" target="_blank" rel="noopener" class="project-gh-icon" aria-label="GitHub">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-      </svg>
-    </a>
-  </div>
-</div>
-
-<!-- ─── 05 · Urban Eats ─── -->
       <div class="project-card" data-tags="sql">
   <div class="project-card-top">
-    <div class="project-num">05</div>
+    <div class="project-num">06</div>
     <div class="project-header-right">
       <span class="project-category">Database Analytics</span>
-      <div class="project-tool-badges"><span class="badge">SQL</span><span class="badge">MySQL</span></div>
+      <div class="project-tool-badges"></div>
     </div>
   </div>
   
@@ -602,7 +1133,7 @@
     <div class="project-divider"></div>
     
     <div class="project-meta-row">
-      <span class="project-meta-label">🛠️ Tools</span>
+      <span class="project-meta-label">🛠 Tools</span>
       <div class="project-chips">
         <span class="chip-tool">SQL</span>
         <span class="chip-tool">MySQL</span>
@@ -646,22 +1177,20 @@
   </div>
   
   <div class="project-card-footer">
-    <a href="https://github.com/racheltran184/SQL-Project-1" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
-    <a href="https://github.com/racheltran184/SQL-Project-1" target="_blank" rel="noopener" class="project-gh-icon" aria-label="GitHub">
+    <a href="https://github.com/racheltran184/SQL-Project-1" target="_blank" class="project-link">View on GitHub →</a>
+    <a href="https://github.com/racheltran184/SQL-Project-1" target="_blank" class="project-gh-icon" aria-label="GitHub">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
       </svg>
     </a>
   </div>
 </div>
-
-<!-- ─── 06 · Victoria Road Safety ─── -->
 <div class="project-card" data-tags="tableau">
   <div class="project-card-top">
-    <div class="project-num">06</div>
+    <div class="project-num">07</div>
     <div class="project-header-right">
       <span class="project-category">Geospatial Risk Analytics</span>
-      <div class="project-tool-badges"><span class="badge">Tableau</span><span class="badge">R</span><span class="badge">ggplot2</span></div>
+      <div class="project-tool-badges"></div>
     </div>
   </div>
   
@@ -678,7 +1207,7 @@
     <div class="project-divider"></div>
     
     <div class="project-meta-row">
-      <span class="project-meta-label">🛠️ Tools</span>
+      <span class="project-meta-label">🛠 Tools</span>
       <div class="project-chips">
         <span class="chip-tool">Tableau</span>
         <span class="chip-tool">R</span>
@@ -719,23 +1248,23 @@
   </div>
   
   <div class="project-card-footer">
-    <a href="https://github.com/racheltran184/Tableu-Project-1" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
-    <a href="https://github.com/racheltran184/Tableu-Project-1" target="_blank" rel="noopener" class="project-gh-icon" aria-label="GitHub">
+    <a href="https://github.com/racheltran184/Tableu-Project-1" target="_blank" class="project-link">View on GitHub →</a>
+    <a href="https://github.com/racheltran184/Tableu-Project-1" target="_blank" class="project-gh-icon" aria-label="GitHub">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
       </svg>
     </a>
   </div>
 </div>
-
-<!-- ─── 07 · LuminaTech ─── -->
       <div class="project-card" data-tags="python">
   <div class="project-card-top">
-    <div class="project-num">07</div>
+    <div class="project-num">08</div>
     <div class="project-header-right">
       <span class="project-category">Sales Analytics</span>
-      <div class="project-tool-badges"><span class="badge">Python</span><span class="badge">pandas</span><span class="badge">statsmodels</span></div>
     </div>
+  </div>
+
+  <div class="project-tool-badges">
   </div>
 
           <div class="project-card-img">
@@ -754,7 +1283,7 @@
     <div class="project-divider"></div>
 
     <div class="project-meta-row">
-      <span class="project-meta-label">🛠️ Tools</span>
+      <span class="project-meta-label">🛠 Tools</span>
       <div class="project-chips">
         <span class="chip-tool">Python</span>
         <span class="chip-tool">pandas</span>
@@ -770,7 +1299,7 @@
       <span class="project-meta-label">⚙️ Techniques</span>
       <div class="project-chips">
         <span class="chip-technique">ETL Pipeline (modular, reusable)</span>
-        <span class="chip-technique">Business-rule &amp; hierarchical imputation</span>
+        <span class="chip-technique">Business-rule & hierarchical imputation</span>
         <span class="chip-technique">Arcsinh transformation</span>
         <span class="chip-technique">Welch's t-tests (Yeo-Johnson)</span>
         <span class="chip-technique">OLS regression (HC3 robust SE)</span>
@@ -800,96 +1329,16 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="project-card-footer">
-    <a href="https://github.com/racheltran184/Python-Project-2" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
-    <a href="https://github.com/racheltran184/Python-Project-2" target="_blank" rel="noopener" class="project-gh-icon" aria-label="GitHub">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-      </svg>
-    </a>
-  </div>
-</div>
-
-<!-- ─── 08 · TikTok Shop case challenge ─── -->
-<div class="project-card" data-tags="webapp">
-  <div class="project-card-top">
-    <div class="project-num">08</div>
-    <div class="project-header-right">
-      <span class="project-category">Ops Strategy + Tool</span>
-      <div class="project-tool-badges"><span class="badge">JavaScript</span><span class="badge">HTML5</span><span class="badge">SheetJS</span></div>
+        <div class="project-card-footer">
+          <a href="https://github.com/racheltran184/Python-Project-2" target="_blank" class="project-link">View on GitHub →</a>
+          <a href="https://github.com/racheltran184/Python-Project-2" target="_blank" class="project-gh-icon" aria-label="GitHub">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+              </svg>
+          </a>
     </div>
   </div>
-
-  <div class="project-card-img">
-    <img src="images/tiktok.jpg" alt="Tích Tắc 12.12 Mission Control" loading="lazy"
-         onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Tích Tắc 12.12 Mission Control</div>'"/>
-  </div>
-  <div class="project-card-body">
-    <h3>TikTok Shop Southeast Asia Regional Case Challenge</h3>
-    <p class="project-summary">
-      Led the operations workstream for a proposed campaign targeting US$1 million in single-day GMV, with a 63-day roadmap, KPI thresholds and staged risk controls. Built a mission-control monitoring tool (HTML, Excel import) that tracks hourly GMV against a fixed hourly pass mark, with rule-based warning signals that name the next move and its owner.
-    </p>
-    <div class="project-divider"></div>
-
-    <div class="project-meta-row">
-      <span class="project-meta-label">🛠️ Tools</span>
-      <div class="project-chips">
-        <span class="chip-tool">JavaScript (ES6)</span>
-        <span class="chip-tool">HTML5</span>
-        <span class="chip-tool">CSS3</span>
-        <span class="chip-tool">SheetJS</span>
-      </div>
     </div>
-
-    <div class="project-meta-row">
-      <span class="project-meta-label">⚙️ Techniques</span>
-      <div class="project-chips">
-        <span class="chip-technique">GMV Driver Decomposition</span>
-        <span class="chip-technique">Rule-Based Alerting</span>
-        <span class="chip-technique">Input Validation</span>
-        <span class="chip-technique">Risk-Control Planning</span>
-        <span class="chip-technique">Go / No-Go Gating</span>
-      </div>
-    </div>
-
-    <div class="project-divider"></div>
-
-    <div class="project-meta-row">
-      <span class="project-meta-label">📊 Results</span>
-      <div class="project-results">
-        <div class="result-stat">
-          <strong>Creator Selection:</strong> Showed Creator B was the only one of five emerging creators whose peak GMV per hour (USD 67.8K, about twice the next best) covers USD 1M inside a day: 14.8 hours, rounded up to a 15-hour show.
-        </div>
-        <div class="result-stat">
-          <strong>Driver Diagnosis:</strong> Split GMV per hour into views, orders per 1,000 views and order value (about USD 66.7K per hour at target), so every slow hour points to its weakest driver.
-        </div>
-        <div class="result-stat">
-          <strong>Pre-Agreed Escalation:</strong> Set one fixed pass mark of USD 66,667 per hour, with Watch after one miss and Act now after two in a row, turning the response to a fading hour into a rule instead of an improvisation.
-        </div>
-        <div class="result-stat">
-          <strong>Risk Runway:</strong> Planned 63 days in five phases, each with a warning signal, preventive controls and an owner, plus a 14 Nov go/no-go gate on the 11.11 rehearsal.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="project-card-footer">
-    <div class="project-links">
-      <a href="https://aitoolforriskcontrol.vercel.app/" target="_blank" rel="noopener" class="project-link">Live demo →</a>
-      <a href="https://github.com/racheltran184/Project-AI-tool-for-Risk-Control" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
-    </div>
-    <a href="https://github.com/racheltran184/Project-AI-tool-for-Risk-Control" target="_blank" rel="noopener" class="project-gh-icon" aria-label="GitHub">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-      </svg>
-    </a>
-  </div>
-</div>
-
-    </div><!-- /#projectsGrid -->
-  </div>
 </section>
 
 <!-- ═══ CONTACT ═══ -->
@@ -903,18 +1352,18 @@
         </div>
         <p class="contact-intro">Open to data analyst, BI analyst, and analytics engineer opportunities in Sydney. Always happy to connect, collaborate, or discuss interesting data problems.</p>
         <div class="contact-details">
-          <div class="contact-row"><span class="contact-label">Email</span><span class="contact-val"><a href="mailto:rachel.hantran@gmail.com">rachel.hantran@gmail.com</a></span></div>
+          <div class="contact-row"><span class="contact-label">Email</span><span class="contact-val"><a href="mailto:racheltran184@gmail.com">racheltran184@gmail.com</a></span></div>
           <div class="contact-row"><span class="contact-label">Phone</span><span class="contact-val">0433 092 533</span></div>
           <div class="contact-row"><span class="contact-label">Location</span><span class="contact-val">Sydney, Australia</span></div>
-          <div class="contact-row"><span class="contact-label">GitHub</span><span class="contact-val"><a href="https://github.com/racheltran184" target="_blank" rel="noopener">github.com/racheltran184</a></span></div>
-          <div class="contact-row"><span class="contact-label">LinkedIn</span><span class="contact-val"><a href="https://www.linkedin.com/in/racheltran184/" target="_blank" rel="noopener">linkedin.com/in/racheltran184</a></span></div>
+          <div class="contact-row"><span class="contact-label">GitHub</span><span class="contact-val"><a href="https://github.com/racheltran184" target="_blank">github.com/racheltran184</a></span></div>
+          <div class="contact-row"><span class="contact-label">Linkedin</span><span class="contact-val"><a href="https://www.linkedin.com/in/racheltran184/" target="_blank">https://www.linkedin.com/racheltran184</a></span></div>
         </div>
       </div>
       <div class="reveal">
         <p class="contact-right-big">Ready to<br/>turn data into<br/><em>impact?</em></p>
         <div class="contact-btns">
           <a href="mailto:racheltran184@gmail.com" class="btn btn-white">Send an Email →</a>
-          <a href="https://github.com/racheltran184" target="_blank" rel="noopener" class="btn btn-white-ghost">GitHub ↗</a>
+          <a href="https://github.com/racheltran184" target="_blank" class="btn btn-white-ghost">GitHub ↗</a>
         </div>
       </div>
     </div>
@@ -923,14 +1372,71 @@
 
 <!-- ═══ FOOTER ═══ -->
 <footer>
-  <span>© Rachel Tran</span>
+  <span>© 2026 Rachel Tran</span>
   <span>Data Analyst · Sydney, Australia</span>
+  <span>Built for Vercel</span>
 </footer>
 
+<script>
+// ── Theme toggle
+(function(){
+  var btn = document.getElementById('themeToggle');
+  var root = document.documentElement;
+  var moon = document.getElementById('icon-moon');
+  var sun  = document.getElementById('icon-sun');
+  var d = matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light';
+  function set(v) {
+    d = v;
+    root.setAttribute('data-theme', v);
+    if (v === 'dark') { moon.style.display = 'none'; sun.style.display = ''; btn.setAttribute('aria-label','Switch to light mode'); }
+    else              { sun.style.display  = 'none'; moon.style.display = ''; btn.setAttribute('aria-label','Switch to dark mode'); }
+  }
+  set(d);
+  btn.addEventListener('click', function(){ set(d === 'dark' ? 'light' : 'dark'); });
+})();
 
-  <script src="js/theme.js"></script>
-  <script src="js/scroll.js"></script>
-  <script src="js/tabs.js"></script>
-  <script src="js/projects.js"></script>
+// ── Scroll reveal
+var obs = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
+
+// ── Active nav
+var sections = document.querySelectorAll('section[id]');
+var navLinks  = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', function(){
+  var cur = '';
+  sections.forEach(function(s){ if(window.scrollY >= s.offsetTop - 80) cur = s.id; });
+  navLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#'+cur); });
+});
+
+// ── Experience / Education tabs
+document.querySelectorAll('.exp-tab-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.exp-tab-btn').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+    document.querySelectorAll('.exp-tab-panel').forEach(function(p){ p.classList.remove('active'); });
+    btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+    var target = document.getElementById(btn.getAttribute('aria-controls'));
+    if(target) target.classList.add('active');
+  });
+});
+
+// ── Project filter
+document.querySelectorAll('.filter-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var f = btn.dataset.filter;
+    document.querySelectorAll('.project-card').forEach(function(c){
+      c.style.display = (f === 'all' || c.dataset.tags.includes(f)) ? 'flex' : 'none';
+    });
+  });
+});
+
+// ── Hide profile placeholder once image loads
+var img = document.querySelector('.profile-box img');
+var fb  = document.getElementById('profileFallback');
+if(img){ img.addEventListener('load', function(){ if(fb) fb.style.display='none'; }); }
+</script>
 </body>
 </html>
