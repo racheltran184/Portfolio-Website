@@ -900,72 +900,70 @@
     <div class="project-num">03</div>
     <div class="project-header-right">
       <span class="project-category">Machine Learning</span>
-      <div class="project-tool-badges">
-        </div>
+      <div class="project-tool-badges"><span class="badge">Python</span><span class="badge">XGBoost</span><span class="badge">SHAP</span></div>
     </div>
   </div>
-  
+
           <div class="project-card-img">
-          <img src="images/airbnbproject.jpg" alt="Airbnb Price Prediction" loading="lazy"
-               onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Airbnb Price Prediction</div>'"/>
+          <img src="images/airbnbproject.jpg" alt="Melbourne Airbnb Price Model" loading="lazy"
+               onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Melbourne Airbnb Price Model</div>'"/>
         </div>
 <div class="project-card-body">
-    <h3>Airbnb Price Prediction</h3>
+    <h3>Melbourne Airbnb Price Model</h3>
     <p class="project-summary">
-      Built a predictive pricing model that turns raw rental data into clear market intelligence. By isolating the key factors that actually drive property value, the tool helps hosts optimize their rates for maximum revenue and allows platforms to easily spot unusual pricing trends.
+      Built a price model for 7,000 Melbourne Airbnb listings that placed 1st of 105 teams in a Kaggle competition, on a five-stage, leakage-safe pipeline that turns 61 raw fields into 175 features. A post-competition check traced most of the error to the yardstick, and a fair-price model showed what the gap between asking and fair price means for hosts, guests, platforms and policy makers.
     </p>
-    
+
     <div class="project-divider"></div>
-    
 
     <div class="project-meta-row">
       <span class="project-meta-label">🛠 Tools</span>
       <div class="project-chips">
         <span class="chip-tool">Python</span>
+        <span class="chip-tool">pandas</span>
+        <span class="chip-tool">scikit-learn</span>
         <span class="chip-tool">XGBoost</span>
         <span class="chip-tool">LightGBM</span>
-        <span class="chip-tool">Random Forest</span>
         <span class="chip-tool">Optuna</span>
         <span class="chip-tool">SHAP</span>
-        <span class="chip-tool">Pandas</span>
-        <span class="chip-tool">Scikit-learn</span>
-        <span class="chip-tool">Geopy</span>
-        <span class="chip-tool">VADER NLP</span>
       </div>
     </div>
-    
+
     <div class="project-meta-row">
       <span class="project-meta-label">⚙️ Techniques</span>
       <div class="project-chips">
+        <span class="chip-technique">Leakage-Safe Pipeline</span>
         <span class="chip-technique">SHAP Feature Selection</span>
         <span class="chip-technique">Bayesian Hyperparameter Tuning</span>
-        <span class="chip-technique">Data Leakage Prevention</span>
-        <span class="chip-technique">Sentiment Analysis</span>
-        <span class="chip-technique">Feature Engineering</span>
+        <span class="chip-technique">Error Analysis</span>
+        <span class="chip-technique">Hedonic Regression</span>
       </div>
     </div>
-    
+
     <div class="project-divider"></div>
-    
+
 <div class="project-meta-row">
       <span class="project-meta-label">📊 Results</span>
       <div class="project-results">
         <div class="result-stat">
-          <strong>Location Valuation:</strong> Quantified the exact financial impact of geography, proving that proximity to the city center drives up to a 40-60% price premium over outer suburbs.
+          <strong>Competition Result:</strong> 1st of 105 teams on the private leaderboard with tuned XGBoost (MAE $108.80), 8% lower error than Random Forest and $0.88 ahead of LightGBM on the same features.
         </div>
         <div class="result-stat">
-          <strong>Trust & Experience Premiums:</strong> Revealed that strong host response rates and trust signals generate a 10-15% revenue premium, proving that experience factors often outweigh physical property features.
+          <strong>Error Audit:</strong> Traced the jump from $51 in cross-validation to $109 on the leaderboard to the yardstick: validation scored capped prices, and 10 placeholder prices above $5,000 (0.14% of listings) accounted for 51% of all error.
         </div>
         <div class="result-stat">
-          <strong>Amenity ROI:</strong> Assigned concrete dollar values to property upgrades, demonstrating that high-value amenities consistently add $15 to $30 to the daily rental price.
+          <strong>Location:</strong> Found a U-shaped price curve, not a simple distance discount: against the middle ring, central listings ask 17% more and the outer suburbs 9% less, while the Yarra Ranges asks 28% more.
         </div>
         <div class="result-stat">
-          <strong>Luxury Market Capture:</strong> Optimized the pricing strategy to correctly value the high-end market segment, successfully identifying luxury properties that were historically underpriced to capture lost revenue.
+          <strong>Trust &amp; Amenities:</strong> Superhosts charge 5.5% less than comparable listings yet log 22 reviews a year against 7; a fireplace, allowing pets and a dryer add 18%, 14% and 11%, while pools and balconies show no clear premium.
+        </div>
+        <div class="result-stat">
+          <strong>Fair Price:</strong> 23% of listings ask 20% or more above their fair price and average 12.9 open nights in the next 30 days against 10.0, while 235 booked-solid listings sit a median $44 a night below it.
         </div>
       </div>
     </div>
   </div>
-  
+
   <div class="project-card-footer">
     <a href="https://racheltran184.github.io/Python-Project-1/" target="_blank" class="project-link">View Case Study →</a>
     <a href="https://github.com/racheltran184/Python-Project-1" target="_blank" class="project-gh-icon" aria-label="GitHub">
