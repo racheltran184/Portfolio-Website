@@ -233,6 +233,7 @@
     .logo-marquee-wrap {
       display: flex; flex-direction: column; gap: 0.75rem;
       overflow: hidden;
+      min-width: 0; /* let the grid column shrink to the screen; the strip scrolls inside it */
     }
     .marquee-track {
       overflow: hidden;
@@ -436,7 +437,7 @@
     .contact-details { display: flex; flex-direction: column; gap: 1.2rem; }
     .contact-row { display: flex; gap: 1.2rem; align-items: baseline; }
     .contact-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.25); flex-shrink: 0; width: 80px; }
-    .contact-val { font-size: 0.92rem; color: var(--mid); }
+    .contact-val { font-size: 0.92rem; color: var(--mid); min-width: 0; overflow-wrap: anywhere; }
     .contact-val a { color: rgba(255,255,255,0.75); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.15); transition: color 0.2s, border-color 0.2s; }
     .contact-val a:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
     .contact-right-big { font-family: var(--serif); font-size: clamp(36px, 4.5vw, 58px); font-weight: 900; line-height: 1.1; letter-spacing: -0.02em; color: #fff; margin-bottom: 1.5rem; }
@@ -473,6 +474,7 @@
       .exp-tab-bar { flex-direction: column; }
       .exp-tab-btn { width: 100%; text-align: center; }
       .projects-grid { grid-template-columns: 1fr; }
+      .skills-cards { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -667,7 +669,7 @@
             <div class="logo-pill"><img src="https://api.iconify.design/logos/microsoft-power-bi.svg" alt="Power BI" height="22" loading="lazy"/><span>Power BI</span></div>
             <div class="logo-pill"><img src="https://profilinator.rishav.dev/skills-assets/tableau.svg" alt="Tableau" height="22" loading="lazy"/><span>Tableau</span></div>
             <div class="logo-pill"><img src="https://cdn.simpleicons.org/qlik/009845" alt="Qlik Sense" height="22" loading="lazy"/><span>Qlik Sense</span></div>
-            <div class="logo-pill"><img src="https://https://api.iconify.design/vscode-icons/file-type-excel.svg" alt="Excel" height="22" loading="lazy"/><span>Excel</span></div>
+            <div class="logo-pill"><img src="https://api.iconify.design/vscode-icons/file-type-excel.svg" alt="Excel" height="22" loading="lazy"/><span>Excel</span></div>
           </div>
         </div>
         <div class="marquee-track" aria-hidden="true">
@@ -983,7 +985,6 @@
           </div>
         </div>
         <div class="project-card-img">
-          <energy-project class="jpg"></energy-project>
           <img src="images/energy-project.jpg" alt="Global Energy Dashboard" loading="lazy"
                onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Global Energy Dashboard</div>'"/>
         </div>
@@ -1335,6 +1336,84 @@
     </a>
   </div>
 </div>
+      <div class="project-card" data-tags="python">
+  <div class="project-card-top">
+    <div class="project-num">09</div>
+    <div class="project-header-right">
+      <span class="project-category">Customer Segmentation</span>
+      <div class="project-tool-badges"><span class="badge">Python</span><span class="badge">scikit-learn</span><span class="badge">pandas</span></div>
+    </div>
+  </div>
+
+          <div class="project-card-img">
+          <img src="images/gym-segmentation-project.jpg" alt="Gym Member Segmentation: all 2,000 members as dots stacked by age, Starters in grey and Established members in white" loading="lazy"
+               onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'>Gym Member Segmentation</div>'"/>
+        </div>
+<div class="project-card-body">
+    <h3>Gym Member Segmentation</h3>
+    <p class="project-summary">
+      Segmented 2,000 gym members with k-means++ and agglomerative clustering, then stress-tested the result six ways. Every method finds the same two segments, Starters and Established, because the seven membership fields describe one life stage, and where members live already sorts them. Nine actions for offers, clubs and sign-up data follow, and none needs a member's gender or marital status.
+    </p>
+
+    <div class="project-divider"></div>
+
+    <div class="project-meta-row">
+      <span class="project-meta-label">🛠 Tools</span>
+      <div class="project-chips">
+        <span class="chip-tool">Python</span>
+        <span class="chip-tool">pandas</span>
+        <span class="chip-tool">NumPy</span>
+        <span class="chip-tool">scikit-learn</span>
+        <span class="chip-tool">matplotlib</span>
+        <span class="chip-tool">seaborn</span>
+      </div>
+    </div>
+
+    <div class="project-meta-row">
+      <span class="project-meta-label">⚙️ Techniques</span>
+      <div class="project-chips">
+        <span class="chip-technique">K-Means++ Clustering</span>
+        <span class="chip-technique">Agglomerative Clustering (Ward)</span>
+        <span class="chip-technique">Elbow &amp; Silhouette Analysis</span>
+        <span class="chip-technique">Robustness Testing</span>
+        <span class="chip-technique">Gower Distance</span>
+      </div>
+    </div>
+
+    <div class="project-divider"></div>
+
+    <div class="project-meta-row">
+      <span class="project-meta-label">📊 Results</span>
+      <div class="project-results">
+        <div class="result-stat">
+          <strong>Two Segments:</strong> Two segments score a silhouette of 0.545, against 0.433 for three and 0.452 for four: 1,024 Starters (mean age 34) and 976 Established members (mean age 48).
+        </div>
+        <div class="result-stat">
+          <strong>One Axis:</strong> Income follows age almost exactly (r = 0.9995), and marital status moves with job type (0.95), education (0.88) and city size (0.79), so seven fields describe one life stage.
+        </div>
+        <div class="result-stat">
+          <strong>Robustness:</strong> Ward linkage puts 97.9% of members in the same segment as k-means, and 99.4% keep their segment when gender and marital status are left out.
+        </div>
+        <div class="result-stat">
+          <strong>Where They Live:</strong> All 798 big-city members are Established, while small cities hold 952 Starters and 178 Established members who still need a premium option.
+        </div>
+        <div class="result-stat">
+          <strong>Simple Rule:</strong> Big city, or a skilled or management job, puts 97.8% of members in the same segment as the clustering, so the sign-up form can stop asking for income.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="project-card-footer">
+    <a href="https://racheltran184.github.io/Python-Project-3/" target="_blank" class="project-link">View Case Study →</a>
+    <a href="https://github.com/racheltran184/Python-Project-3" target="_blank" class="project-gh-icon" aria-label="GitHub">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+      </svg>
+    </a>
+  </div>
+</div>
+    </div>
+  </div>
 </section>
 
 <!-- ═══ CONTACT ═══ -->
